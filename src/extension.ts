@@ -219,6 +219,9 @@ async function getLatestVersion(): Promise<{ version: string, asset: Asset, url:
 	if (!response.headers['content-type']?.includes('application/json')) {
 		throw new Error(`Unexpected response from ${url}:\n${response.headers}\n\n${data}`);
 	}
+	if (!Array.isArray(data)) {
+		throw new Error(`Unexpected release list format from ${url}/releases: ${JSON.stringify(data)}`);
+	}
 	const releases = data as Release[];
 	const releaseInfo: Release = releases
 		.filter(release => {
